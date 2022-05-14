@@ -14,23 +14,11 @@ class PermissionServiceProvider extends ServiceProvider
 
     protected function offerPublishing()
     {
-        $this->publishes([
-            __DIR__ . '/../database/migrations/create_permission_tables.php.stub' => $this->getMigrationFileName('create_permission_tables.php'),
-        ], 'migrations');
-    }
-
-    /**
-     * Returns existing migration file if found, else uses the current timestamp.
-     *
-     * @return string
-     */
-    protected function getMigrationFileName($migrationFileName)
-    {
         $timestamp = date('Y_m_d_His');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . "/../database/migrations/{$migrationFileName}.stub" => $this->app->databasePath() . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . $timestamp . $migrationFileName,
+                __DIR__ . "/../database/migrations/create_permission_tables.stub" => $this->app->databasePath() . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR . $timestamp . 'create_permission_tables',
             ], 'migrations');
         }
     }
