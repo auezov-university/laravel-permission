@@ -17,30 +17,28 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('guard_name');
             $table->timestamps();
+            $table->unique(['name', 'guard_name']);
         });
-
 
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
+            $table->string('slug');
             $table->string('name');
-            $table->string('description')->nullable();
             $table->string('guard_name');
             $table->timestamps();
-            $table->unique(['name', 'guard_name']);
+            $table->unique(['slug', 'guard_name']);
         });
-
 
         Schema::create('permissions', function (Blueprint $table) {
             $table->id();
+            $table->string('slug');
             $table->string('name');
-            $table->string('description')->nullable();
             $table->string('guard_name');
-            $table->boolean('status')->default(true);
             $table->timestamps();
-            $table->unique(['name', 'guard_name']);
+            $table->unique(['slug', 'guard_name']);
         });
-
 
         Schema::create('module_has_permissions', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id');
@@ -60,7 +58,6 @@ return new class extends Migration
 
         });
 
-
         Schema::create('role_has_modules', function (Blueprint $table) {
             $table->unsignedBigInteger('module_id');
             $table->unsignedBigInteger('role_id');
@@ -78,7 +75,6 @@ return new class extends Migration
             $table->primary(['module_id', 'role_id'], 'role_has_modules_module_id_role_id_primary');
 
         });
-
 
         Schema::create('role_has_permissions', function (Blueprint $table) {
             $table->unsignedBigInteger('permission_id');
@@ -98,11 +94,10 @@ return new class extends Migration
 
         });
 
-
         Schema::create('model_has_roles', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
-            $table->string('model_type');
             $table->unsignedBigInteger('model_id');
+            $table->string('model_type');
 
             $table->index(['model_id', 'model_type'], 'model_has_roles_model_id_model_type_index');
 
@@ -114,7 +109,6 @@ return new class extends Migration
             $table->primary(['role_id', 'model_id', 'model_type'],
                 'model_has_roles_model_type_primary');
         });
-
     }
 
     /**

@@ -13,14 +13,14 @@ class Role extends Model
 
     protected $table = 'roles';
 
-    public function modules(): BelongsToMany
-    {
-        return $this->belongsToMany(Module::class, 'role_has_modules', 'role_id', 'module_id');
-    }
-
     public function users(): MorphToMany
     {
         return $this->morphedByMany(getModelForGuard($this->attributes['guard_name']), 'model', 'model_has_roles', 'role_id', 'model_id');
+    }
+
+    public function modules(): BelongsToMany
+    {
+        return $this->belongsToMany(Module::class, 'role_has_modules', 'role_id', 'module_id');
     }
 
     public function permissions(): BelongsToMany
